@@ -5,4 +5,5 @@ jobs:
     runs-on: ubuntu-24.04-arm
     steps:
       - run: |
-          uname -a
+          node --version
+          npm --version
