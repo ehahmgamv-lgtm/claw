@@ -4,4 +4,5 @@ jobs:
   claw:
     runs-on: ubuntu-24.04-arm
     steps:
-      uname -a
+      - run: |
+          uname -a
