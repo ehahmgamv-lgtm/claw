@@ -1,0 +1,7 @@
+name: claw
+on: workflow_dispatch
+jobs:
+  claw:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      uname -a
