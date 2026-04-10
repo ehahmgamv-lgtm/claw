@@ -4,6 +4,8 @@ jobs:
   claw:
     runs-on: ubuntu-24.04-arm
     steps:
+      - uses: actions/setup-node@v6
+        with: node-version: 'lts/*'
       - run: |
           sudo npm install -g openclaw@latest
           openclaw --version
