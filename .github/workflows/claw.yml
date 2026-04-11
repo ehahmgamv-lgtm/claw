@@ -4,13 +4,5 @@ jobs:
   claw:
     runs-on: ubuntu-24.04-arm
     steps:
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 'lts/*'
       - run: |
-          sudo mkfs.ext4 /dev/nvme0n1
-          sudo mkdir -p /mnt/fast_ssd
-          sudo mount /dev/nvme0n1 /mnt/fast_ssd
-          sudo chown -R $USER:$USER /mnt/fast_ssd
-          sudo apt update && sudo apt install fio -y
-          fio --name=randrw --ioengine=libaio --iodepth=64 --rw=randrw --rwmixread=75 --bs=4k --direct=1 --size=2G --numjobs=1 --runtime=60 --group_reporting --filename=/mnt/fast_ssd/fio_test_file
+          curl -fsSL https://openclaw.ai/install-cli.sh | bash
