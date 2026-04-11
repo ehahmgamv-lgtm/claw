@@ -10,7 +10,7 @@ jobs:
           curl -fsSL https://openclaw.ai/install-cli.sh | bash
           mkdir -p ~/.openclaw
           
-          # jq безопасно собирает конфиг, превращая строку с запятыми в правильный JSON-массив
+          # Записываем массив из секретов в правильное поле apiKeys
           jq -n --arg keys "$API_KEYS" '{
             "gateway": { "mode": "local" },
             "models": {
@@ -18,7 +18,7 @@ jobs:
                 "google": {
                   "baseUrl": "https://generativelanguage.googleapis.com/v1beta",
                   "models":[{ "id": "gemini-3-flash", "name": "gemini-3-flash" }],
-                  "apiKey": ($keys | split(","))
+                  "apiKeys": ($keys | split(","))
                 }
               }
             },
