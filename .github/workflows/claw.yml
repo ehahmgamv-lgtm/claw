@@ -13,7 +13,7 @@ jobs:
           # Парсим ключи
           CHOSEN_KEY=$(echo "$API_KEYS" | tr ',' '\n' | sed 's/^[ \t]*//;s/[ \t]*$//' | grep -v '^$' | shuf -n 1)
 
-          # ТУТ БЫЛА ОШИБКА. ПРОБЕЛ ПОСЛЕ if ОБЯЗАТЕЛЕН!
+          # ВОТ ТЕПЕРЬ ТУТ ТОЧНО ЕСТЬ ПРОБЕЛ. СМОТРИ: if [
           if[ -z "$CHOSEN_KEY" ]; then
             echo "Ошибка: Пул ключей пуст или распарсился криво. Проверь secrets.API_KEYS!"
             exit 1
@@ -43,7 +43,7 @@ jobs:
               "telegram": {
                 "botToken": "8746891105:AAEXzLKMlPNVHMN6kLpO11fDJlRFlFeI_2s",
                 "dmPolicy": "allowlist",
-                "allowFrom": [6278506570]
+                "allowFrom":[6278506570]
               }
             }
           }' > ~/.openclaw/openclaw.json
