@@ -14,7 +14,7 @@ jobs:
           CHOSEN_KEY=$(echo "$API_KEYS" | tr ',' '\n' | sed 's/^[ \t]*//;s/[ \t]*$//' | grep -v '^$' | shuf -n 1)
 
           # ВОТ ТЕПЕРЬ ТУТ ТОЧНО ЕСТЬ ПРОБЕЛ. СМОТРИ: if [
-          if[ -z "$CHOSEN_KEY" ]; then
+          if [ -z "$CHOSEN_KEY" ]; then
             echo "Ошибка: Пул ключей пуст или распарсился криво. Проверь secrets.API_KEYS!"
             exit 1
           fi
