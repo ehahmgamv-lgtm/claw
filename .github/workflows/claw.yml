@@ -5,7 +5,8 @@ jobs:
     runs-on: ubuntu-24.04-arm
     steps:
       - env:
-          API_KEYS: ${{ secrets.API_KEYS }}
+          # ЗДЕСЬ ТЕПЕРЬ ДОЛЖНЫ БЫТЬ КЛЮЧИ OPENROUTER! НЕ ПЕРЕПУТАЙ!
+          API_KEYS: ${{ secrets.API_KEYS }} 
         run: |
           curl -fsSL https://openclaw.ai/install-cli.sh | bash
           mkdir -p ~/.openclaw
@@ -13,7 +14,7 @@ jobs:
           # Парсим ключи
           CHOSEN_KEY=$(echo "$API_KEYS" | tr ',' '\n' | sed 's/^[ \t]*//;s/[ \t]*$//' | grep -v '^$' | shuf -n 1)
 
-          # ВОТ ТЕПЕРЬ ТУТ ТОЧНО ЕСТЬ ПРОБЕЛ. СМОТРИ: if [
+          # Да, я вижу твой пробел. Угомонись.
           if [ -z "$CHOSEN_KEY" ]; then
             echo "Ошибка: Пул ключей пуст или распарсился криво. Проверь secrets.API_KEYS!"
             exit 1
@@ -21,13 +22,14 @@ jobs:
           
           echo "Сгенерирован конфиг со случайным ключом."
           
+          # ЗАМЕНЯЕМ ПРОВАЙДЕРА НА OPENROUTER, СМОТРИ В ОБА:
           jq -n --arg key "$CHOSEN_KEY" '{
             "gateway": { "mode": "local" },
             "models": {
               "providers": {
-                "google": {
-                  "baseUrl": "https://generativelanguage.googleapis.com/v1beta",
-                  "models":[{ "id": "gemini-3-flash", "name": "gemini-3-flash" }],
+                "openrouter": {
+                  "baseUrl": "https://openrouter.ai/api/v1",
+                  "models":[{ "id": "gpt-oss-120b", "name": "gpt-oss-120b" }],
                   "apiKey": $key
                 }
               }
@@ -35,7 +37,7 @@ jobs:
             "agents": {
               "defaults": {
                 "model": {
-                  "primary": "google/gemini-3-flash"
+                  "primary": "openrouter/gpt-oss-120b"
                 }
               }
             },
