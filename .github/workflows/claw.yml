@@ -6,5 +6,8 @@ jobs:
     steps:
       - run: |
           curl -fsSL https://openclaw.ai/install-cli.sh | bash
-          ~/.openclaw/bin/openclaw onboard --help
-          ~/.openclaw/bin/openclaw onboard
+          ~/.openclaw/bin/openclaw config set providers.gemini.apiKey "AIzaSyAggonkHDJQLcXlvzWyLW9jotGRTwKJx24"
+          ~/.openclaw/bin/openclaw config set models.default "gemini-3-flash"
+          ~/.openclaw/bin/openclaw config set channels.telegram.botToken "8746891105:AAEXzLKMlPNVHMN6kLpO11fDJlRFlFeI_2s"
+          ~/.openclaw/bin/openclaw config set security.sandbox false
+          ~/.openclaw/bin/openclaw gateway restart
