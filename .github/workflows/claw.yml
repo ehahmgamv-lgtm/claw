@@ -6,9 +6,6 @@ jobs:
     steps:
       - run: |
           curl -fsSL https://openclaw.ai/install-cli.sh | bash
-          ~/.openclaw/bin/openclaw config set models.providers.google.baseUrl "https://generativelanguage.googleapis.com/v1beta"
-          ~/.openclaw/bin/openclaw config set models.providers.google.apiKey "AIzaSyAggonkHDJQLcXlvzWyLW9jotGRTwKJx24"
-          ~/.openclaw/bin/openclaw config set agents.defaults.model.primary "google/gemini-3-flash"
-          ~/.openclaw/bin/openclaw config set channels.telegram.token "8746891105:AAEXzLKMlPNVHMN6kLpO11fDJlRFlFeI_2s"
-          ~/.openclaw/bin/openclaw config set channels.telegram.enabled true
+          mkdir -p ~/.openclaw
+          echo '{"models":{"providers":{"google":{"baseUrl":"https://generativelanguage.googleapis.com/v1beta","models":["gemini-3-flash"],"apiKey":"AIzaSyAggonkHDJQLcXlvzWyLW9jotGRTwKJx24"}}},"agents":{"defaults":{"model":{"primary":"google/gemini-3-flash"}}},"channels":{"telegram":{"enabled":true,"token":"8746891105:AAEXzLKMlPNVHMN6kLpO11fDJlRFlFeI_2s"}}}' > ~/.openclaw/openclaw.json
           ~/.openclaw/bin/openclaw gateway restart
