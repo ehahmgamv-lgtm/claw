@@ -6,5 +6,5 @@ jobs:
     steps:
       - run: |
           curl -fsSL https://openclaw.ai/install-cli.sh | bash
-          ~/.local/bin/openclaw onboard --help
-          ~/.local/bin/openclaw onboard
+          ~/.openclaw/bin/openclaw onboard --help
+          ~/.openclaw/bin/openclaw onboard
