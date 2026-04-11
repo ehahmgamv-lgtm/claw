@@ -12,5 +12,5 @@ jobs:
           sudo mkdir -p /mnt/fast_ssd
           sudo mount /dev/nvme0n1 /mnt/fast_ssd
           sudo chown -R $USER:$USER /mnt/fast_ssd
-          dd if=/dev/zero of=/mnt/fast_ssd/test.img bs=1G count=2 oflag=direct
-          dd if=/dev/zero of=~/test.img bs=1G count=2 oflag=direct
+          sudo apt update && sudo apt install fio -y
+          fio --name=randrw --ioengine=libaio --iodepth=64 --rw=randrw --rwmixread=75 --bs=4k --direct=1 --size=2G --numjobs=1 --runtime=60 --group_reporting --filename=/mnt/fast_ssd/fio_test_file
