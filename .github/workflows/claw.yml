@@ -8,4 +8,9 @@ jobs:
         with:
           node-version: 'lts/*'
       - run: |
-          lsblk
+          sudo mkfs.ext4 /dev/nvme0n1
+          sudo mkdir -p /mnt/fast_ssd
+          sudo mount /dev/nvme0n1 /mnt/fast_ssd
+          sudo chown -R $USER:$USER /mnt/fast_ssd
+          dd if=/dev/zero of=/mnt/fast_ssd/test.img bs=1G count=2 oflag=direct
+          dd if=/dev/zero of=~/test.img bs=1G count=2 oflag=direct
