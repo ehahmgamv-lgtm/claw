@@ -10,15 +10,29 @@ jobs:
           curl -fsSL https://openclaw.ai/install-cli.sh | bash
           mkdir -p ~/.openclaw
           
-          # Возвращаем apiKey на место, передавая все ключи одной строкой ($keys)
-          jq -n --arg keys "$API_KEYS" '{
+          # Жестко и надежно выбираем ОДИН случайный ключ из строки
+          # 1. Заменяем запятые на переносы строк (tr)
+          # 2. Чистим от случайных пробелов (sed)
+          # 3. Убираем пустые строки на всякий случай (grep)
+          # 4. Выбираем ровно один случайный (shuf)
+          CHOSEN_KEY=$(echo "$API_KEYS" | tr ',' '\n' | sed 's/^[ \t]*//;s/[ \t]*$//' | grep -v '^$' | shuf -n 1)
+
+          if[ -z "$CHOSEN_KEY" ]; then
+            echo "Ошибка: Пул ключей пуст или распарсился криво. Проверь secrets.API_KEYS!"
+            exit 1
+          fi
+          
+          echo "Сгенерирован конфиг со случайным ключом."
+          
+          # Передаем ТОЛЬКО ВЫБРАННЫЙ КЛЮЧ ($CHOSEN_KEY) в jq под именем переменной 'key'
+          jq -n --arg key "$CHOSEN_KEY" '{
             "gateway": { "mode": "local" },
             "models": {
               "providers": {
                 "google": {
                   "baseUrl": "https://generativelanguage.googleapis.com/v1beta",
                   "models":[{ "id": "gemini-3-flash", "name": "gemini-3-flash" }],
-                  "apiKey": $keys
+                  "apiKey": $key
                 }
               }
             },
