@@ -5,7 +5,6 @@ jobs:
     runs-on: ubuntu-24.04-arm
     steps:
       - env:
-          # ЗДЕСЬ ТЕПЕРЬ ДОЛЖНЫ БЫТЬ КЛЮЧИ OPENROUTER! НЕ ПЕРЕПУТАЙ!
           API_KEYS: ${{ secrets.API_KEYS }} 
         run: |
           curl -fsSL https://openclaw.ai/install-cli.sh | bash
@@ -14,7 +13,6 @@ jobs:
           # Парсим ключи
           CHOSEN_KEY=$(echo "$API_KEYS" | tr ',' '\n' | sed 's/^[ \t]*//;s/[ \t]*$//' | grep -v '^$' | shuf -n 1)
 
-          # Да, я вижу твой пробел. Угомонись.
           if [ -z "$CHOSEN_KEY" ]; then
             echo "Ошибка: Пул ключей пуст или распарсился криво. Проверь secrets.API_KEYS!"
             exit 1
@@ -22,14 +20,14 @@ jobs:
           
           echo "Сгенерирован конфиг со случайным ключом."
           
-          # ЗАМЕНЯЕМ ПРОВАЙДЕРА НА OPENROUTER, СМОТРИ В ОБА:
+          # СКОПИРУЙ ЭТО И НЕ ТРОГАЙ БОЛЬШЕ ID МОДЕЛЕЙ:
           jq -n --arg key "$CHOSEN_KEY" '{
             "gateway": { "mode": "local" },
             "models": {
               "providers": {
                 "openrouter": {
                   "baseUrl": "https://openrouter.ai/api/v1",
-                  "models":[{ "id": "gpt-oss-120b", "name": "gpt-oss-120b" }],
+                  "models":[{ "id": "openai/gpt-oss-120b:free", "name": "GPT OSS 120B Free" }],
                   "apiKey": $key
                 }
               }
@@ -37,7 +35,7 @@ jobs:
             "agents": {
               "defaults": {
                 "model": {
-                  "primary": "openrouter/gpt-oss-120b"
+                  "primary": "openrouter/openai/gpt-oss-120b:free"
                 }
               }
             },
