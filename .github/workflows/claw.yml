@@ -8,4 +8,4 @@ jobs:
         with:
           node-version: 'lts/*'
       - run: |
-          grep -E "CONFIG_CC_OPTIMIZE|CONFIG_LTO" /boot/config-$(uname -r)
+          free -h
