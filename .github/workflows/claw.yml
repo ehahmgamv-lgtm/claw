@@ -4,8 +4,38 @@ jobs:
   claw:
     runs-on: ubuntu-24.04-arm
     steps:
-      - run: |
+      - env:
+          API_KEYS: ${{ secrets.API_KEYS }}
+        run: |
           curl -fsSL https://openclaw.ai/install-cli.sh | bash
           mkdir -p ~/.openclaw
-          echo '{"gateway":{"mode":"local"},"models":{"providers":{"google":{"baseUrl":"https://generativelanguage.googleapis.com/v1beta","models":[{"id":"gemini-3-flash","name":"gemini-3-flash"}],"apiKey":"AIzaSyAggonkHDJQLcXlvzWyLW9jotGRTwKJx24"}}},"agents":{"defaults":{"model":{"primary":"google/gemini-3-flash"}}},"channels":{"telegram":{"botToken":"8746891105:AAEXzLKMlPNVHMN6kLpO11fDJlRFlFeI_2s","dmPolicy":"allowlist","allowFrom":[6278506570]}}}' > ~/.openclaw/openclaw.json
+          
+          # jq безопасно собирает конфиг, превращая строку с запятыми в правильный JSON-массив
+          jq -n --arg keys "$API_KEYS" '{
+            "gateway": { "mode": "local" },
+            "models": {
+              "providers": {
+                "google": {
+                  "baseUrl": "https://generativelanguage.googleapis.com/v1beta",
+                  "models":[{ "id": "gemini-3-flash", "name": "gemini-3-flash" }],
+                  "apiKey": ($keys | split(","))
+                }
+              }
+            },
+            "agents": {
+              "defaults": {
+                "model": {
+                  "primary": "google/gemini-3-flash"
+                }
+              }
+            },
+            "channels": {
+              "telegram": {
+                "botToken": "8746891105:AAEXzLKMlPNVHMN6kLpO11fDJlRFlFeI_2s",
+                "dmPolicy": "allowlist",
+                "allowFrom":[6278506570]
+              }
+            }
+          }' > ~/.openclaw/openclaw.json
+          
           ~/.openclaw/bin/openclaw gateway
