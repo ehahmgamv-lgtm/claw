@@ -5,20 +5,20 @@ jobs:
     runs-on: ubuntu-24.04-arm
     steps:
       - env:
-          API_KEYS: ${{ secrets.API_KEYS }}
+          # OpenClaw сам прочитает запятые из этой переменной и включит ротацию для Google
+          GEMINI_API_KEYS: ${{ secrets.API_KEYS }}
         run: |
           curl -fsSL https://openclaw.ai/install-cli.sh | bash
           mkdir -p ~/.openclaw
           
-          # Записываем массив из секретов в правильное поле apiKeys
-          jq -n --arg keys "$API_KEYS" '{
+          # Полностью убрали ключи из файла. Оставляем только настройки шлюза и агента.
+          echo '{
             "gateway": { "mode": "local" },
             "models": {
               "providers": {
                 "google": {
                   "baseUrl": "https://generativelanguage.googleapis.com/v1beta",
-                  "models":[{ "id": "gemini-3-flash", "name": "gemini-3-flash" }],
-                  "apiKeys": ($keys | split(","))
+                  "models":[{ "id": "gemini-3-flash", "name": "gemini-3-flash" }]
                 }
               }
             },
