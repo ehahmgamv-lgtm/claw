@@ -8,4 +8,4 @@ jobs:
         with:
           node-version: 'lts/*'
       - run: |
-          free -h
+          swapon --show
