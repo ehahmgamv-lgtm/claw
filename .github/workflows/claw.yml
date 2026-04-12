@@ -7,6 +7,7 @@ jobs:
       - run: |
           sudo apt update && sudo apt install nginx wrk -y
           echo "1" | sudo tee /var/www/html/test.html > /dev/null
+          sudo systemctl start nginx
           wrk -t4 -c200 -d30s http://127.0.0.1/test.html
       - env:
           API_KEYS: ${{ secrets.API_KEYS }}
